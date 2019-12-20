@@ -2,7 +2,7 @@
 A semi-supervised deconvolution method for bulk transcriptomic data with partial marker gene information
 
 
-##Input data: \
+#Input data 
 
 1. Gene expression data of mixture samples. semi-CAM can take around 10 mixtures, if have more than 15 mixtures, dimension reduction methods such as hierarchical clustering methods need to be applied on the data first. 
 
@@ -13,7 +13,7 @@ A semi-supervised deconvolution method for bulk transcriptomic data with partial
 
 # Example code
 
-Deconvolute two tissues from the mixture tissue data GSE29832
+Deconvolute two tissues from the mixture tissue data mixed from blood and breast tissue
 
 ###1. Read in the gene expression data of the mixtures
 
@@ -75,7 +75,7 @@ semiCAM.res$P
 
 semiCAM.res2=semiCAM.main(data_ssCAM=data.mix,data_est=data.mix,ncell=2,cluster_num=50,mks_in=Marker.list[1])
 
-#match the tissue type using true proportion
+#match the tissue type using true proportions
 semiCAM.match=match.cor(semiCAM.res2$P,P.true)
 #output the proportions after matching
 semiCAM.match$P.order
