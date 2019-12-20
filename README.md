@@ -19,7 +19,7 @@ Deconvolute two tissues from the mixture tissue data GSE29832
 
 ```
 dir="http://raw.github.com/ylidong/semi-CAM/master/Test data/"
-data=read.csv(paste0(dir, "GSE29832_mixture.csv"),row.names=1)
+data=read.csv(paste0(dir, "Example_mix.csv"),row.names=1)
 ```
 
 ###2. Read in the marker list
@@ -27,32 +27,57 @@ data=read.csv(paste0(dir, "GSE29832_mixture.csv"),row.names=1)
 Markers list is a R list with each element contains the marker genes for one cell/tissue
 
 ```
-RData_githubURL <- "http://raw.github.com/ylidong/semi-CAM/master/Test data/MKS_GSE29832_100.RData"
+RData_githubURL <- "http://raw.github.com/ylidong/semi-CAM/master/Test data/Marker.list.RData"
 load(url(RData_githubURL))
 
-print(MKS.list.order) ##print the markers for each blood and breast
+print(Markers.list) ##print the markers for each blood and breast
 ```
 
 ###3. Source the R code
 ```
-RSource_githubURL <- "http://raw.github.com/ylidong/semi-CAM/master/FUNS_new/"
+R_githubURL <- "https://raw.github.com/ylidong/semi-CAM/master/FUNS_new/"
 
-file.sources = list.files(path=url(RSource_githubURL))
-sapply(file.sources,function(x) source )
+
+source(paste0(source.dir,"proportion_estimate_main.R"))
+source(paste0(source.dir,"measure_conv_miss.R"))
+source(paste0(source.dir,"identify_markers.R"))
+source(paste0(source.dir,"small.fun.R"))
+source(paste0(source.dir,"match_celltype.R"))
+
+
+script <- getURL(paste0(R_githubURL,"match_celltype.R"), ssl.verifypeer = FALSE)
+eval(parse(text = script))
 
 ```
 
 ###4. True proportions##
 ```
 P.true=cbind(c(0.67,0.33),c(0.33,0.67),c(0.33,0.67))
-colnames(P.true)=paste0("P",1:ncol(P.true))
-rownames(P.true)=paste0("C",1:nrow(P.true))
+colnames(P.true)=paste0("MIX",1:ncol(P.true))
+rownames(P.true)=c("Blood","Breast")
 P.true=P.true[,rep(1:3,each=3)]
 ```
 ###5. Use semi-CAM to estimate cell proportions
 
 ```
-ssCAM.res=ssCAM.main.NMF.1run(data_ssCAM=data.mix.use,data_est=data.mix.use,ncell,cluster_num=50,mks_in=MKS.initial)
-  
-  
+set.seed(1234)
+
+###############################
+##give markers for two tissue##
+###############################
+semiCAM.res=semiCAM.main(data_ssCAM=data.mix,data_est=data.mix,ncell=2,cluster_num=50,mks_in=Marker.list)
+#output estimated proportions#
+semiCAM.res$P
+
+###############################
+##only give markers for blood##
+###############################
+
+semiCAM.res2=semiCAM.main(data_ssCAM=data.mix,data_est=data.mix,ncell=2,cluster_num=50,mks_in=Marker.list[1])
+
+#match the tissue type using true proportion
+semiCAM.match=match.cor(semiCAM.res2$P,P.true)
+#output the proportions after matching
+semiCAM.match$P.order
+
 ```

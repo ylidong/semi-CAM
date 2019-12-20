@@ -6,6 +6,10 @@ CAM.nWCA <- function(X, K,cluster_num=50) {
   #                      (maximally 10)
   
   # load the library "MASS" for the function "ginv"
+  
+  #X=as.matrix(t(data.mix.use)); K=ncell;cluster_num=50
+  
+  
   packageExist <- require("MASS")
   if (!packageExist) {
     install.packages("MASS")
@@ -113,12 +117,13 @@ CAM.nWCA <- function(X, K,cluster_num=50) {
   ##finally get K vertices
 }
 
-CAM.nWCA_force <- function(data, K, cluster_num,cluster_arg,MKS.initial) {
+CAM.nWCA_force<- function(data, K, cluster_num,cluster_arg,MKS.initial) {
   #data=Data.sus;K=k;cluster_num=50;cluster_arg="Hartigan-Wong";MKS.initial=MKS.list.given
-  #data=data_cl;K=k;cluster_num=50;cluster_arg="Hartigan-Wong";MKS.initial=mk.list_in
+  #data=data.mix.use;K=ncell;cluster_num=50;cluster_arg="Hartigan-Wong";MKS.initial
   
+
   data=as.matrix(data)
- # data=as.matrix(data.mix.filter);K=ncell;cluster_num=50;cluster_arg="Hartigan-Wong";MKS.initial=MKS.initial
+  # data=as.matrix(data.mix.filter);K=ncell;cluster_num=50;cluster_arg="Hartigan-Wong";MKS.initial=MKS.initial
   
   #data=data_filter;K=ncell;cluster_num=20;cluster_arg="Hartigan-Wong";MKS.initial=MKS.initial
   #data=data_filter_all;K=cn_ni;cluster_num=20;cluster_arg="Hartigan-Wong";MKS.initial=mks$MKS.cam
@@ -153,18 +158,13 @@ CAM.nWCA_force <- function(data, K, cluster_num,cluster_arg,MKS.initial) {
   data_norm=data/rowSums(data)
   
   ##calculate given initial centers given markers##
-  #set.seed(123)
+  
   if(length(MKS.initial)!=0){
     center.mks=do.call(rbind,lapply(MKS.initial,function(mks){ if(length(mks)>1) out=colMeans(data_norm[mks,]);if(length(mks)==1) out=data_norm[mks,];out} ) )
     rownames(center.mks)=paste0("MKS_kown",1:nrow(center.mks))
   }else{
     center.mks=NULL
   }
-  
-  data_left=data_norm[!rownames(data_norm)%in%unlist(MKS.initial),]
-  center.left=data_left[sample(1:nrow(data_left),(cluster_num-length(MKS.initial))),]
-  
-  center.initial=rbind(center.mks,center.left)
   
   tt = lapply(MKS.initial, length)
   mm = length(tt)
@@ -173,27 +173,21 @@ CAM.nWCA_force <- function(data, K, cluster_num,cluster_arg,MKS.initial) {
   
   if(mm>0){
     for(k in 1:mm){
-      data_new[rownames(data_new)%in%unlist(MKS.initial[k]),] <- matrix(rep(center.initial[k,], times= length(unlist(MKS.initial[k]))), nrow=length(unlist(MKS.initial[k])), ncol=length(center.initial[k,]), byrow = T)
+      data_new[rownames(data_new)%in%unlist(MKS.initial[k]),] <- matrix(rep(center.mks[k,], times= length(unlist(MKS.initial[k]))), nrow=length(unlist(MKS.initial[k])), ncol=length(center.mks[k,]), byrow = T)
     }
   }
   ##call kmeans##
-  cluster <- kmeans(data_new,center.initial,iter.max=100,algorithm =cluster_arg)
+  cluster <- kmeans(data_new,cluster_num,iter.max=100,algorithm =cluster_arg)
   
   for (i in 1:50){
     
-    center.left=data_left[sample(1:nrow(data_left),(cluster_num-length(MKS.initial))),]
-    
-    center.initial=rbind(center.mks,center.left)
-    
-    tmp <- kmeans(data_new,center.initial,iter.max=100,algorithm =cluster_arg)
+    tmp <- kmeans(data_new,cluster_num,iter.max=100,algorithm =cluster_arg)
     
     if (cluster$tot.withinss>tmp$tot.withinss){
       cluster <- tmp
     }
     #print(cluster$tot.withinss)
   }
-  
-  
   
   ##exclude small clusters##
   small_cluster <- matrix(numeric(0),0,0)
@@ -224,7 +218,6 @@ CAM.nWCA_force <- function(data, K, cluster_num,cluster_arg,MKS.initial) {
     V.pick=lapply(vertice.known,function(kk) Vs[[kk]])
     
   }else{
-    
     
     J <- dim(cluster$centers)[1]
     ##convex hull method to choose potential vertice##
