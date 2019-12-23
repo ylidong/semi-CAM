@@ -79,8 +79,8 @@ semiCAM.res=semiCAM.main(data_ssCAM=data.mix,data_est=data.mix,ncell=2,cluster_n
 #data_ssCAM: the mixture expression profiles used for marker identifications
 #data_est: the mixture expression profiles used for proportion estimates 
 #ncell: the number of cell types in the mixture
+#cluster_num: number of clusters used for marker identifications
 #mks_in: the available marker gene list for partial/all cell types
-
 
 #output estimated proportions#
 semiCAM.res$P
