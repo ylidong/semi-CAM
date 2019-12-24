@@ -13,7 +13,7 @@ A semi-supervised deconvolution method for bulk transcriptomic data with partial
 
 # Example code
 
-Deconvolute two tissues from a mixture tissue data mixed from blood and breast tissue
+Deconvolute 9 mixtures mixed from blood and breast tissue
 
 ### 1. Read in the gene expression data of the mixtures
 
@@ -33,7 +33,7 @@ load(url(RData_githubURL))
 print(Marker.list) ##print the markers for blood and breast
 ```
 
-### 3. Source the R code and download the required package
+### 3. Source R code and download the required package
 ```
 ##################
 ##Source R codes##
@@ -74,22 +74,22 @@ P.true=P.true[,rep(1:3,each=3)]
 
 ```
 ###############################
-##give markers for two tissue##
+##use markers for two tissues##
 ###############################
 set.seed(12334)
 semiCAM.res=semiCAM.main(data_ssCAM=data.mix,data_est=data.mix,ncell=2,cluster_num=50,mks_in=Marker.list)
-#data_ssCAM: the mixture expression profiles used for marker identifications
-#data_est: the mixture expression profiles used for proportion estimates 
+#data_ssCAM: the mixture expressions used for marker identifications
+#data_est: the mixture expressions used for proportion estimates 
 #ncell: the number of cell types in the mixture
-#cluster_num: number of clusters used for marker identifications
+#cluster_num: the number of clusters used for marker identifications
 #mks_in: the available marker gene list for partial/all cell types
 
 #output estimated proportions#
 semiCAM.res$P
 
-###############################
-##only give markers for blood##
-###############################
+##############################
+##only use markers for blood##
+##############################
 set.seed(12334)
 semiCAM.res2=semiCAM.main(data_ssCAM=data.mix,data_est=data.mix,ncell=2,cluster_num=50,mks_in=Marker.list[1])
 
