@@ -74,7 +74,7 @@ P.true=P.true[,rep(1:3,each=3)]
 ###############################
 ##give markers for two tissue##
 ###############################
-set.seed(1234)
+set.seed(12334)
 semiCAM.res=semiCAM.main(data_ssCAM=data.mix,data_est=data.mix,ncell=2,cluster_num=50,mks_in=Marker.list)
 #data_ssCAM: the mixture expression profiles used for marker identifications
 #data_est: the mixture expression profiles used for proportion estimates 
@@ -88,7 +88,7 @@ semiCAM.res$P
 ###############################
 ##only give markers for blood##
 ###############################
-set.seed(1234)
+set.seed(12334)
 semiCAM.res2=semiCAM.main(data_ssCAM=data.mix,data_est=data.mix,ncell=2,cluster_num=50,mks_in=Marker.list[1])
 
 #match the tissue types using true proportions
