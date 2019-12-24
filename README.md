@@ -13,16 +13,16 @@ A semi-supervised deconvolution method for bulk transcriptomic data with partial
 
 # Example code
 
-Deconvolute 9 mixtures mixed from blood and breast tissue
+Deconvolute 9 mixtures mixed from blood and breast tissues
 
-### 1. Read in the gene expression data of the mixtures
+### 1. Read the gene expression data of the mixtures
 
 ```
 data.dir="http://raw.github.com/ylidong/semi-CAM/master/Test data/"
 data.mix=read.csv(paste0(data.dir, "Example_mix.csv"),row.names=1)
 ```
 
-### 2. Read in the marker list
+### 2. Read the marker list for blood and breast tissues
 
 Markers list is a R list with each element contains the marker genes for one cell/tissue
 
