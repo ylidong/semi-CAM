@@ -15,14 +15,14 @@ A semi-supervised deconvolution method for bulk transcriptomic data with partial
 
 Deconvolute two tissues from a mixture tissue data mixed from blood and breast tissue
 
-###1. Read in the gene expression data of the mixtures
+### 1. Read in the gene expression data of the mixtures
 
 ```
 data.dir="http://raw.github.com/ylidong/semi-CAM/master/Test data/"
 data.mix=read.csv(paste0(data.dir, "Example_mix.csv"),row.names=1)
 ```
 
-###2. Read in the marker list
+### 2. Read in the marker list
 
 Markers list is a R list with each element contains the marker genes for one cell/tissue
 
@@ -30,11 +30,14 @@ Markers list is a R list with each element contains the marker genes for one cel
 RData_githubURL <- "http://raw.github.com/ylidong/semi-CAM/master/Test data/Marker.list.RData"
 load(url(RData_githubURL))
 
-print(Marker.list) ##print the markers for each blood and breast
+print(Marker.list) ##print the markers for blood and breast
 ```
 
-###3. Source the R code
+### 3. Source the R code and download the required package
 ```
+##################
+##Source R codes##
+##################
 library(devtools)
 #or install.packages("devtools")
 R_githubURL <- "https://raw.github.com/ylidong/semi-CAM/master/FUNS_new/"
@@ -60,17 +63,16 @@ library(CellMix)
 
 ```
 
-###4. True proportions##
+### 4. True proportions##
 ```
 P.true=cbind(c(0.67,0.33),c(0.33,0.67),c(0.33,0.67))
 colnames(P.true)=paste0("MIX",1:ncol(P.true))
 rownames(P.true)=c("Blood","Breast")
 P.true=P.true[,rep(1:3,each=3)]
 ```
-###5. Use semi-CAM to estimate cell proportions
+### 5. Use semi-CAM to estimate cell proportions
 
 ```
-
 ###############################
 ##give markers for two tissue##
 ###############################
