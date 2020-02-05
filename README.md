@@ -58,10 +58,15 @@ biocLite("BiocInstaller")
 library(BiocInstaller)
 
 # install the required package CellMix
+# On Windows or Mac OS X, this will try install the source package 
 biocLite('CellMix', siteRepos=c('http://web.cbio.uct.ac.za/~renaud/CRAN'), type='both')
 
-# if cannot open the link, can download the source code from the folder CellMix source code and install it using 
-#install.packages(path_to_file/CellMix_1.6.2.tar.gz, repos = NULL, type="source")
+# on Linux this will try install the source package 
+biocLite('CellMix', siteRepos=c('http://web.cbio.uct.ac.za/~renaud/CRAN'))
+
+# if cannot open the link, can download the source codes from the folder Required_pacakages_source and install it using 
+#install.packages("path_to_file/NMF_0.20.tar.gz", repos = NULL, type="source")
+#install.packages("path_to_file/CellMix_1.6.2.tar.gz", repos = NULL, type="source")
 
 library(CellMix)
 
