@@ -52,13 +52,17 @@ source_url(paste0(R_githubURL,"match_celltype.R"))
 ##download the required CellMix package##
 #########################################
 # get biocLite from bioconductor
-source('http://bioconductor.org/biocLite.R')
+source("https://bioconductor.org/biocLite.R")
+biocLite("BiocInstaller")
 # or
 library(BiocInstaller)
-# Example: install NMF package
-# On Windows or Mac OS X, this will try install the source package 
-# if a binary package is not available for the OS version
+
+# install the required package CellMix
 biocLite('CellMix', siteRepos=c('http://web.cbio.uct.ac.za/~renaud/CRAN'), type='both')
+
+# if cannot open the link, can download the source code from the folder CellMix source code and install it using 
+#install.packages(path_to_file/CellMix_1.6.2.tar.gz, repos = NULL, type="source")
+
 library(CellMix)
 
 ```
